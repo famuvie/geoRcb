@@ -17,6 +17,13 @@ However, currently there is an R-package [gdistance](http://cran.r-project.org/w
   devtools::install_github('famuvie/geoRcb')
   ```
 
+## Examples
+   ```R
+   library(geoRcb)
+   example('variog')
+   example('likfit')
+   example('krige.conv')
+   ```
 
 ## References 
 
