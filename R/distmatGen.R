@@ -4,43 +4,86 @@
 #'@import gdistance
 #'@details
 #'@param pts A SpatialPointsDataFrame with a defined projection
-#'@param costsurf optional cost surface Raster
+#'@param costsurf cost surface Raster
+#'@param ret specify whether to return distances between obs-obs ("o"), obs-loc ("l"), or both ("b")
 #'@details If a cost surface raster is not supplied a uniform (cost 1) grid will be generated to match to bounding box of pts
-#'@example #res<-distmatGen(obs)
-#'plt<-cbind(res[1,],dd.distmat[1,])
-#'plot(plt)
+#'@example
+#'data(noise)
+#'r<-raster(nrows=40,ncols=40,resolution=1)
+#'r<-setExtent(r,extent(obs),keepres=T)
+#'aggfac<-5
+#'costsurf<-rasterize(malilla,r,background=aggfac,field=rep(10000,length(polygons(malilla))))
+#'costsurf<-reclassify(costsurf,c(aggfac+1,Inf,NA))
+#'costsurf<-aggregate(costsurf,aggfac,expand=T,fun=max,na.rm=T)
+#'
+#'res<-distmatGen(obs,costsurf,ret="l")
+#'plot(dd.distmat[,51],res[,51],ylim=c(0,600),xlim=c(0,600))
 #'abline(0,1,col="red")
+#'
 
-distmatGen<-function(pts,...){
+distmatGen<-function(pts,costsurf,ret){
 
-  coords<-coordinates(pts)
+  #pts<-obs
+  #ret="o"
+  r<-costsurf
 
-  if(!exists("costsurf")){
-  ocoords<-cbind(coords[order(coords[,1]),1],coords[order(coords[,2]),2])
-  ocoords.shift<-rbind(ocoords[-1,],NA)
-  ocoords.diff<-ocoords-ocoords.shift
-  ocoords.diff<-ocoords.diff[apply(ocoords.diff,1,function(x) sum(x!=0))==2,]
-  #hist(abs(ocoords.diff[,2]))
-  minres<-mean(c(abs(ocoords.diff[,1]),abs(ocoords.diff[,2])),na.rm=T)
-  diag<-sqrt(minres^2+minres^2)
-
-  r<-raster(nrows=36,ncols=36)
-  r<-setExtent(r,extent(pts))
-  res(r)<-minres
-  r<-setExtent(r,extent(pts))
-  r<-setValues(r,rep(1,ncell(r)))
-  projection(r)<-proj4string(pts)
-  }else{
-    r<-costsurf
-    diag<-sqrt(res(r)^2+res(r)^2)
+  if(!extent(r)>=extent(pts)){
+    xn<-floor(extent(pts)[1]-1)
+    xx<-ceiling(extent(pts)[2]+1)
+    yn<-floor(extent(pts)[3]-1)
+    yx<-ceiling(extent(pts)[4]+1)
+    ext<-unlist(lapply(list(xn,xx,yn,yx),function(x) round(x,0)))
+    r<-extend(r,extent(ext))
   }
 
   tr<-transition(r,function(x) 1/mean(x),8)
 
-  distmat<-list()
-  for(i in 1:nrow(pts)){
-    distmat[[i]]<-extract(accCost(tr,coordinates(pts)[i,]),pts)*diag
+  if(ret=="b"|ret=="o"){
+  oret<-diag(0,nrow=nrow(pts))
+  oret.c<-matrix(costDistance(tr,coordinates(pts)))
+  oret[lower.tri(oret)]<-oret.c
+  oret<-oret+t(oret)
   }
-  do.call("rbind",distmat)
+
+  if(ret=="b"|ret=="l"){
+    tocoords<-coordinates(xyFromCell(tr,which(values(r)==res(r)),spatial=TRUE))
+    lret<-diag(0,nrow=nrow(tocoords))
+    lret.c<-matrix(costDistance(tr,tocoords))#CANNOT ALLOCATE ENOUGH MEMORY
+    lret[lower.tri(lret)]<-lret.c
+    lret<-lret+t(lret)
+    }
+
+  if(ret=="b"){
+    list(oret,lret)
+  }
+  if(ret=="o"){
+    oret
+  }else{
+    lret
+  }
+
 }
 
+
+##reimplementation of gdistance costDistance function (sparse matrices solve memory allocation error?)
+#path distances are always less than or equal to straight-line distances
+
+# cd2<-function(x,fromCoords){
+#   #x<-tr
+#   #fromCoords<-tocoords
+#
+#   fromCoords <- gdistance:::.coordsToMatrix(fromCoords)
+#   fromCells <- cellFromXY(x, fromCoords)
+#
+#   if(!all(!is.na(fromCells))){
+#     warning("some coordinates not found and omitted")
+#     fromCells <- fromCells[!is.na(fromCells)]
+#   }
+#
+#   costDist <- matrix(NA, nrow=length(fromCoords[,1]),ncol=length(fromCoords[,1]))
+#   rownames(costDist) <- rownames(fromCoords)
+#   colnames(costDist) <- rownames(fromCoords)
+#
+#   if(isSymmetric(transitionMatrix(x))) {m <- "undirected"} else{m <- "directed"}
+#
+# }
