@@ -9,6 +9,7 @@ Description: Mainly, three functions are adapted in order to admit custom
 Depends:
     R (>= 3.0.0),
     geoR (>= 1.7.4.1)
+    gdistance
 License: GPL (>= 3)
 LazyData: true
 Encoding: UTF-8
