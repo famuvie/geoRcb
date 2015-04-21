@@ -1,10 +1,15 @@
 #' cost-based kriging
 #'
 #' All the arguments work as in \code{\link[geoR]{krige.conv}}, except the
-#' additional arguments \code{dd.dists.mat} and \code{dl.dists.mat},
-#' which take matrices of distances between observation locations and
-#' between observations and prediction locations respectively
+#' additional arguments \code{dd.dists.mat} and \code{dl.dists.mat}, which take
+#' matrices of distances between observation locations and between observations
+#' and prediction locations respectively
 #'
+#' @param dd.dists.mat n x n symmetric matrix with cost-based distances between
+#'   observations
+#' @param dl.dists.mat m x n matrix with cost-based distances from each
+#'   observation to each one of the m prediction locations
+#' @inheritParams geoR::krige.conv
 #' @examples
 #' ## geodata structure with transformed covariates
 #' data(noise)
@@ -17,6 +22,13 @@
 #' trend=~d2TV1*(d2TV2+d2TV3)
 #'
 #' loc1.df <- as.data.frame(1/(1+(as.data.frame(loc)[covarnames]/20)^2))
+#'
+#' ## fitting variogram models
+#' vgmdl.std  <- likfit(geodata = obs.gd, trend=trend,
+#'                      ini = c(8,300), cov.model = "matern")
+#' vgmdl.dmat <- likfit(geodata = obs.gd, trend=trend,
+#'                      ini = c(8,300), cov.model = "matern",
+#'                      dists.mat=dd.distmat)
 #'
 #'
 #' # With trend, Euclidean distances

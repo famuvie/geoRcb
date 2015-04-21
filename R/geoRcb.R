@@ -1,3 +1,4 @@
+#' @import geoR
 .onAttach <- function(lib, pkg) {
   ## Substitute some original functions in geoR
   ## by the ones provided in geoRcb
@@ -48,7 +49,7 @@
   }
 
   ## Functions to be 'implanted' into geoR
-  target_funcs <- ls(env = getNamespace('geoRcb'), all.names = TRUE)
+  target_funcs <- ls(envir = getNamespace('geoRcb'), all.names = TRUE)
   exc.idx <- grep('^\\.__.*?__.*$|^\\.onAttach$|^\\.packageName$',
                   target_funcs)
   target_funcs <- target_funcs[-exc.idx]

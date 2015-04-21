@@ -1,6 +1,6 @@
 Package: geoRcb
 Title: An extension of package geoR that works with cost-based distances
-Version: 1.7-4.1
+Version: 1.7-5
 Authors@R: "Facundo Muñoz <facundo.munoz@orleans.inra.fr> [aut, cre]"
 Description: Mainly, three functions are adapted in order to admit custom
     distance matrices as additional arguments. Namely variog, to produce
@@ -9,7 +9,7 @@ Description: Mainly, three functions are adapted in order to admit custom
 Depends:
     R (>= 3.0.0),
     geoR (>= 1.7.4.1)
-License: GPL (>= 3)
+License: GPL (>= 3) | file LICENSE
 LazyData: true
 Encoding: UTF-8
 Suggests: testthat

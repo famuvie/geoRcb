@@ -1,8 +1,12 @@
 #' cost-based empirical variogram
 #'
 #' All the arguments work as in \code{\link[geoR]{variog}}, except the
-#' additional argument \code{dd.dists.mat}, which takes a symmetric matrix of
+#' additional argument \code{dists.mat}, which takes a symmetric matrix of
 #' distances between observation locations
+#'
+#' @param dists.mat n x n symmetric matrix with cost-based distances between
+#'   observations
+#' @inheritParams geoR::variog
 #' @examples
 #'    ## geodata structure with transformed covariates
 #'    data(noise)

@@ -4,6 +4,7 @@
 #' pilot-study in Valencia, Spain (see reference).
 #'
 #' @name noise
+#' @aliases dd.distmat dl.distmat loc malilla obs
 #' @references Antonio López-Quílez and Facundo Muñoz (2009). Geostatistical
 #'   computing of acoustic maps in the presence of barriers. \emph{Mathematical
 #'   and Computer Modelling} \strong{50}(5-6): 929–938.
@@ -24,3 +25,6 @@
 #'    plot(obs.gd)
 NULL
 
+#' @name dd.distmat
+#' @docType data
+#' @describeIn noise cost-based distance matrix from observations to observations
