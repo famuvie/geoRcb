@@ -4,6 +4,9 @@
 #' additional argument \code{dists.mat}, which takes a symmetric matrix of
 #' distances between observation locations
 #'
+#' @param dists.mat n x n symmetric matrix with cost-based distances between
+#'   observations
+#' @inheritParams geoR::likfit
 #' @examples
 #' ## geodata structure with transformed covariates
 #' data(noise)
@@ -1284,6 +1287,13 @@ ini.cov.pars <- ini.cov.pars[[1]]
 }
 
 #' Log-likelihood
+#'
+#' Same as geoR's \code{\link[geoR]{loglik.GRF}} but taking into account non-Euclidean
+#' distances if pertinent.
+#'
+#' @inheritParams geoR::loglik.GRF
+#'
+#' @seealso \code{\link[geoR]{loglik.GRF}}
 "loglik.GRF" <-
   function(geodata, coords=geodata$coords, data=geodata$data,
            obj.model = NULL,

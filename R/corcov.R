@@ -1,6 +1,11 @@
-## Only modified to prevent computing the reciprocal distances between
-## coordinates, in case a custom distance matrix is in use.
-#' Variance-covariance
+#' Computes Covariance Matrix and Related Results
+#'
+#' Same as geoR's \code{\link[geoR]{varcov.spatial}}, but taking into account
+#' non-Euclidean distances if pertinent.
+#'
+#' @inheritParams geoR::varcov.spatial
+#'
+#' @seealso \code{\link[geoR]{varcov.spatial}}
 "varcov.spatial" <-
   function(coords = NULL, dists.lowertri = NULL, cov.model = "matern",
            kappa = 0.5, nugget = 0, cov.pars = stop("no cov.pars argument"),
