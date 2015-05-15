@@ -20,7 +20,7 @@
 #'
 #'res<-distmatGen(obs,costsurf,ret="o")
 #'plot(dd.distmat[,51],res[,51],ylim=c(0,600),xlim=c(0,600))
-#'abline(0,1,col="red")
+#'2
 #'
 
 distmatGen<-function(pts,costsurf,ret){
