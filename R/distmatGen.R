@@ -16,7 +16,9 @@
 #'costsurf<-reclassify(costsurf,c(aggfac+1,Inf,NA))
 #'costsurf<-aggregate(costsurf,aggfac,expand=T,fun=max,na.rm=T)
 #'
-#'res<-distmatGen(obs,costsurf,ret="l")
+#'
+#'
+#'res<-distmatGen(obs,costsurf,ret="o")
 #'plot(dd.distmat[,51],res[,51],ylim=c(0,600),xlim=c(0,600))
 #'abline(0,1,col="red")
 #'
@@ -24,7 +26,7 @@
 distmatGen<-function(pts,costsurf,ret){
 
   #pts<-obs
-  #ret="o"
+  #ret="b"
   r<-costsurf
 
   if(!extent(r)>=extent(pts)){
@@ -46,11 +48,12 @@ distmatGen<-function(pts,costsurf,ret){
   }
 
   if(ret=="b"|ret=="l"){
+    fromcoords<-coordinates(pts)
     tocoords<-coordinates(xyFromCell(tr,which(values(r)==res(r)),spatial=TRUE))
-    lret<-diag(0,nrow=nrow(tocoords))
-    lret.c<-matrix(costDistance(tr,tocoords))#CANNOT ALLOCATE ENOUGH MEMORY
-    lret[lower.tri(lret)]<-lret.c
-    lret<-lret+t(lret)
+    #lret<-diag(0,nrow=nrow(tocoords))
+    lret.c<-matrix(costDistance(tr,fromcoords,tocoords),nrow=nrow(fromcoords))#CANNOT ALLOCATE ENOUGH MEMORY
+    #lret[lower.tri(lret)]<-lret.c
+    lret<-lret.c
     }
 
   if(ret=="b"){
@@ -63,27 +66,3 @@ distmatGen<-function(pts,costsurf,ret){
   }
 
 }
-
-
-##reimplementation of gdistance costDistance function (sparse matrices solve memory allocation error?)
-#path distances are always less than or equal to straight-line distances
-
-# cd2<-function(x,fromCoords){
-#   #x<-tr
-#   #fromCoords<-tocoords
-#
-#   fromCoords <- gdistance:::.coordsToMatrix(fromCoords)
-#   fromCells <- cellFromXY(x, fromCoords)
-#
-#   if(!all(!is.na(fromCells))){
-#     warning("some coordinates not found and omitted")
-#     fromCells <- fromCells[!is.na(fromCells)]
-#   }
-#
-#   costDist <- matrix(NA, nrow=length(fromCoords[,1]),ncol=length(fromCoords[,1]))
-#   rownames(costDist) <- rownames(fromCoords)
-#   colnames(costDist) <- rownames(fromCoords)
-#
-#   if(isSymmetric(transitionMatrix(x))) {m <- "undirected"} else{m <- "directed"}
-#
-# }
