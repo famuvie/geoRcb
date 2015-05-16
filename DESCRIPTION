@@ -1,9 +1,11 @@
 Package: geoRcb
 Title: An Extension of Package geoR that Works with Cost-Based Distances
 Version: 1.7-5
-Authors@R: person("Facundo", "Muñoz",
+Authors@R: c(person("Facundo", "Muñoz",
     email="facundo.munoz@orleans.inra.fr",
-    role=c("aut", "cre"))
+    role=c("aut", "cre")),
+    person("Joseph", "Stachelek",
+    role="ctb"))
 Description: Mainly, three functions are adapted in order to admit custom
     distance matrices as additional arguments. Namely variog, to produce
     empirical variograms; likfit, to fit theoretical variograms and krige.conv,
@@ -11,14 +13,10 @@ Description: Mainly, three functions are adapted in order to admit custom
 Depends:
     R (>= 3.0.0),
     geoR (>= 1.7.4.1)
-<<<<<<< HEAD
     gdistance
-License: GPL (>= 3)
-=======
 License: GPL (>= 3) | file LICENSE
 URL: https://github.com/famuvie/geoRcb
 BugReports: https://github.com/famuvie/geoRcb/issues
->>>>>>> 253f45a95f69ba698ecd2d7bec108538861805e5
 LazyData: true
 Encoding: UTF-8
 Suggests: testthat
