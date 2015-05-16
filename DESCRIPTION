@@ -11,9 +11,14 @@ Description: Mainly, three functions are adapted in order to admit custom
 Depends:
     R (>= 3.0.0),
     geoR (>= 1.7.4.1)
+<<<<<<< HEAD
+    gdistance
+License: GPL (>= 3)
+=======
 License: GPL (>= 3) | file LICENSE
 URL: https://github.com/famuvie/geoRcb
 BugReports: https://github.com/famuvie/geoRcb/issues
+>>>>>>> 253f45a95f69ba698ecd2d7bec108538861805e5
 LazyData: true
 Encoding: UTF-8
 Suggests: testthat
