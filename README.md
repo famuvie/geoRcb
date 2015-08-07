@@ -1,3 +1,5 @@
+[![DOI](https://zenodo.org/badge/4357/famuvie/geoRcb.svg)](https://zenodo.org/badge/latestdoi/4357/famuvie/geoRcb)
+
 geoRcb
 ======
 
