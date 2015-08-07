@@ -1,6 +1,8 @@
 Package: geoRcb
 Title: An Extension of Package geoR that Works with Cost-Based Distances
 Version: 1.7-5
+Date: 2015-08-07
+Encoding: UTF-8
 Authors@R: c(person("Facundo", "Muñoz",
     email="facundo.munoz@orleans.inra.fr",
     role=c("aut", "cre")),

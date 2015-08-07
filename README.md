@@ -8,7 +8,7 @@ Namely `variog`, to produce empirical variograms; `likfit`, to fit theoretical v
 Check the documentation on these functions for examples of usage.
 
 The cost-based distance matrix need to be computed elsewhere.
-I have used [`GRASS GIS`](https://en.wikipedia.org/wiki/GRASS_GIS), with the help of a [script](http://www.geeitema.org/doc/guenmap//docs/v.costdist.mat.zip).
+I have used [`GRASS GIS`](https://en.wikipedia.org/wiki/GRASS_GIS), with the help of a [script](https://github.com/famuvie/v.costdist.mat).
 However, currently there is an R-package [gdistance](http://cran.r-project.org/web/packages/gdistance/index.html) which could help in computing cost-based distances.
 
 ## Instalation
