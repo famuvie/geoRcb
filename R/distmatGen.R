@@ -22,8 +22,8 @@
 #'plot(dd.distmat[,51],res[,51],ylim=c(0,600),xlim=c(0,600))
 #'2
 #'
+distmatGen <- function(pts, costsurf, ret, directions = 16) {
 
-distmatGen<-function(pts,costsurf,ret){
 
   #pts<-obs
   #ret="b"
@@ -38,7 +38,8 @@ distmatGen<-function(pts,costsurf,ret){
     r<-extend(r,extent(ext))
   }
 
-  tr<-transition(r,function(x) 1/mean(x),8)
+  ## Transition matrix
+  tr <- transition(r, geoR_trf, directions)
 
   if(ret=="b"|ret=="o"){
   oret<-diag(0,nrow=nrow(pts))
