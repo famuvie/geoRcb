@@ -49,11 +49,11 @@ distmatGen<-function(pts,costsurf,ret){
 
   if(ret=="b"|ret=="l"){
     fromcoords<-coordinates(pts)
-    tocoords<-coordinates(xyFromCell(tr,which(values(r)==res(r)),spatial=TRUE))
     #lret<-diag(0,nrow=nrow(tocoords))
     lret.c<-matrix(costDistance(tr,fromcoords,tocoords),nrow=nrow(fromcoords))#CANNOT ALLOCATE ENOUGH MEMORY
     #lret[lower.tri(lret)]<-lret.c
     lret<-lret.c
+    tocoords <- xyFromCell(tr,which(values(r)==res(r)))
     }
 
   if(ret=="b"){
