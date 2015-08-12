@@ -14,7 +14,8 @@ geoR_trf(x)
 cost/conductivity value of the transition between neighbouring cells.
 }
 \description{
-Default function to use with \code{\link[gdistance]{transition}}.
+Default function to use with \code{\link[gdistance]{transition}}. Defined as
+the geometric mean.
 }
 \details{
 To use another function, override this one by defining it using the same

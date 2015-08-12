@@ -1,6 +1,7 @@
 #' Default transition function in geoR
 #'
-#' Default function to use with \code{\link[gdistance]{transition}}.
+#' Default function to use with \code{\link[gdistance]{transition}}. Defined as
+#' the geometric mean.
 #'
 #' To use another function, override this one by defining it using the same
 #' name.
@@ -18,6 +19,6 @@
 #'
 #'    geoR_trf(c(0, 1))
 geoR_trf <- function(x) {
-  if (any(x == 0)) return(0)
-  else return(mean(x))
+  stopifnot(length(x) == 2)
+  sqrt(prod(x))
 }
