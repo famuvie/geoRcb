@@ -4,15 +4,19 @@
 \alias{distmatGen}
 \title{Compute cost-based distances}
 \usage{
-distmatGen(pts, costsurf, ret, directions = 16)
+distmatGen(pts, costsurf, ret = c("both", "obs", "loc"), directions = 16,
+  silent = FALSE)
 }
 \arguments{
-\item{pts}{A SpatialPointsDataFrame with a defined projection}
+\item{pts}{A SpatialPoints[DataFrame] with a defined projection or a
+two-column data.frame/matrix of coordinates}
 
 \item{costsurf}{cost surface Raster}
 
-\item{ret}{specify whether to return distances between obs-obs ("o"), obs-loc
-("l"), or both ("b")}
+\item{ret}{specify whether to return distances between obs-obs ("obs"), obs-loc
+("loc"), or both ("both") (default)}
+
+\item{silent}{logical. If TRUE avoids any warnings or messages.}
 
 \item{directions.}{See \code{\link[gdistance]{transition}}.}
 }
@@ -35,7 +39,7 @@ data(noise)
  costsurf <- reclassify(costsurf,c(aggfac+1,Inf,NA))
  costsurf <- aggregate(costsurf,aggfac,expand=T,fun=max,na.rm=T)
 
- res <- distmatGen(obs,costsurf,ret="o")
+ res <- distmatGen(obs,costsurf,ret="obs")
  plot(dd.distmat[,51],res[,51],ylim=c(0,600),xlim=c(0,600))
 }
 
