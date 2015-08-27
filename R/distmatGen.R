@@ -125,6 +125,8 @@ distmatGen <- function(pts,
 #'
 #' Defined as points whith cost distances to every other
 #' point of either 0 or Infinite.
+#'
+#' param x distance matrix.
 idx_isol <- function(x) {
   is.zero_or_inf <- function(x) all(is.infinite(x) | x == 0)
   which(apply(x, 2, is.zero_or_inf))

@@ -17,6 +17,9 @@ Depends:
     geoR (>= 1.7.4.1)
 Imports:
     gdistance
+Suggests:
+    sp
+    raster
 License: GPL (>= 3) | file LICENSE
 URL: https://github.com/famuvie/geoRcb
 BugReports: https://github.com/famuvie/geoRcb/issues

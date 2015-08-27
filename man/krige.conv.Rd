@@ -60,36 +60,38 @@ and prediction locations respectively
 \examples{
 ## geodata structure with transformed covariates
 data(noise)
-covarnames=sapply(1:3, function(x) paste("d2TV", x, sep=""))
-obs.df <- data.frame(Leq=obs$Leq,
-                     1/(1+(as.data.frame(obs)[covarnames]/20)^2))
-obs.gd <- as.geodata(cbind(coordinates(obs), obs.df),
-                     data.col="Leq",
+if (require(sp)) {
+  covarnames=sapply(1:3, function(x) paste("d2TV", x, sep=""))
+  obs.df <- data.frame(Leq=obs$Leq,
+                       1/(1+(as.data.frame(obs)[covarnames]/20)^2))
+  obs.gd <- as.geodata(cbind(coordinates(obs), obs.df),
+                       data.col="Leq",
                      covar.col=c('d2TV1','d2TV2','d2TV3'))
-trend=~d2TV1*(d2TV2+d2TV3)
+  trend=~d2TV1*(d2TV2+d2TV3)
 
-loc1.df <- as.data.frame(1/(1+(as.data.frame(loc)[covarnames]/20)^2))
+  loc1.df <- as.data.frame(1/(1+(as.data.frame(loc)[covarnames]/20)^2))
 
-## fitting variogram models
-vgmdl.std  <- likfit(geodata = obs.gd, trend=trend,
+  ## fitting variogram models
+  vgmdl.std  <- likfit(geodata = obs.gd, trend=trend,
                      ini = c(8,300), cov.model = "matern")
-vgmdl.dmat <- likfit(geodata = obs.gd, trend=trend,
-                     ini = c(8,300), cov.model = "matern",
-                     dists.mat=dd.distmat)
+  vgmdl.dmat <- likfit(geodata = obs.gd, trend=trend,
+                       ini = c(8,300), cov.model = "matern",
+                       dists.mat=dd.distmat)
 
 
-# With trend, Euclidean distances
-# NOTE: The Euclidean prediction is done with cost-based covariates
-KC.std = krige.control(trend.d=trend,
-                       trend.l=~loc1.df$d2TV1*(loc1.df$d2TV2+loc1.df$d2TV3),
-                       obj.model=vgmdl.std)
-kc1.std<-krige.conv(obs.gd,locations=coordinates(loc), krige=KC.std)
+  # With trend, Euclidean distances
+  # NOTE: The Euclidean prediction is done with cost-based covariates
+  KC.std = krige.control(trend.d=trend,
+                         trend.l=~loc1.df$d2TV1*(loc1.df$d2TV2+loc1.df$d2TV3),
+                         obj.model=vgmdl.std)
+  kc1.std<-krige.conv(obs.gd,locations=coordinates(loc), krige=KC.std)
 
-# With trend, Cost-based distances
-KC = krige.control(trend.d=trend,
-                   trend.l=~loc1.df$d2TV1*(loc1.df$d2TV2+loc1.df$d2TV3),
-                   obj.model=vgmdl.dmat)
-kc1<-krige.conv(obs.gd,locations=coordinates(loc), krige=KC,
-                dd.dists.mat=dd.distmat, dl.dists.mat=dl.distmat)
+  # With trend, Cost-based distances
+  KC = krige.control(trend.d=trend,
+                     trend.l=~loc1.df$d2TV1*(loc1.df$d2TV2+loc1.df$d2TV3),
+                     obj.model=vgmdl.dmat)
+  kc1<-krige.conv(obs.gd,locations=coordinates(loc), krige=KC,
+                  dd.dists.mat=dd.distmat, dl.dists.mat=dl.distmat)
+}
 }
 

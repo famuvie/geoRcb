@@ -10,4 +10,7 @@ idx_isol(x)
 Defined as points whith cost distances to every other
 point of either 0 or Infinite.
 }
+\details{
+param x distance matrix.
+}
 

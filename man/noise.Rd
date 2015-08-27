@@ -15,6 +15,7 @@ pilot-study in Valencia, Spain (see reference).
 }
 \examples{
 data(noise)
+ if (require(sp)) {
    plot(malilla)
    points(obs, pch=19, col='red')
 
@@ -26,6 +27,7 @@ data(noise)
                         data.col="Leq",
                         covar.col=c('d2TV1','d2TV2','d2TV3'))
    plot(obs.gd)
+ }
 }
 \references{
 Antonio López-Quílez and Facundo Muñoz (2009). Geostatistical

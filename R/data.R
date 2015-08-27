@@ -12,6 +12,7 @@
 #' @docType data
 #' @examples
 #'    data(noise)
+#'  if (require(sp)) {
 #'    plot(malilla)
 #'    points(obs, pch=19, col='red')
 #'
@@ -23,6 +24,7 @@
 #'                         data.col="Leq",
 #'                         covar.col=c('d2TV1','d2TV2','d2TV3'))
 #'    plot(obs.gd)
+#'  }
 NULL
 
 #' @name dd.distmat

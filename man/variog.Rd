@@ -113,6 +113,7 @@ distances between observation locations
 \examples{
 ## geodata structure with transformed covariates
    data(noise)
+if (require(sp)) {
    covarnames=sapply(1:3, function(x) paste("d2TV", x, sep=""))
    obs.df <- data.frame(Leq=obs$Leq,
                          1/(1+(as.data.frame(obs)[covarnames]/20)^2))
@@ -128,5 +129,6 @@ distances between observation locations
    plot(vg.std, type = 'l', col = 'darkred',
         main = 'Euclidean (red) vs. cost-based (gray) empirical variograms')
    lines(vg.dmat, type = 'l', col = 'darkgray')
+}
 }
 

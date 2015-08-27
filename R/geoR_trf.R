@@ -10,7 +10,7 @@
 #'   numbers.
 #'
 #' @return cost/conductivity value of the transition between neighbouring cells.
-#'
+#' @export
 #' @examples
 #'    geoR_trf(c(0, 1))
 #'
