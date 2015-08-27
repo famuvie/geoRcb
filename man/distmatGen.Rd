@@ -4,42 +4,53 @@
 \alias{distmatGen}
 \title{Compute cost-based distances}
 \usage{
-distmatGen(pts, costsurf, ret = c("both", "obs", "loc"), directions = 16,
+distmatGen(pts, condsurf, ret = c("both", "obs", "loc"), directions = 16,
   silent = FALSE)
 }
 \arguments{
 \item{pts}{A SpatialPoints[DataFrame] with a defined projection or a
 two-column data.frame/matrix of coordinates}
 
-\item{costsurf}{cost surface Raster}
+\item{condsurf}{raster. Conductivity surface.}
 
-\item{ret}{specify whether to return distances between obs-obs ("obs"), obs-loc
-("loc"), or both ("both") (default)}
+\item{ret}{specify whether to return distances between obs-obs ("obs"),
+obs-loc ("loc"), or both ("both") (default)}
+
+\item{directions}{See \code{\link[gdistance]{transition}}.}
 
 \item{silent}{logical. If TRUE avoids any warnings or messages.}
-
-\item{directions.}{See \code{\link[gdistance]{transition}}.}
 }
 \description{
 Generate a cost-based distance matrix among observations and/or between
 observations and prediction locations.
 }
 \details{
-Use the centroids of the cost surface raster cells as prediction locations.
-
-If a cost surface raster is not supplied a uniform (cost 1) grid will be
-generated to match to bounding box of pts
+Use the centroids of the conductivity or conductivity surface raster cells as
+prediction locations.
 }
 \examples{
 data(noise)
- r <- raster(nrows=40,ncols=40,resolution=1)
- r <- setExtent(r,extent(obs),keepres=T)
- aggfac <- 5
- costsurf <- rasterize(malilla,r,background=aggfac,field=rep(10000,length(polygons(malilla))))
- costsurf <- reclassify(costsurf,c(aggfac+1,Inf,NA))
- costsurf <- aggregate(costsurf,aggfac,expand=T,fun=max,na.rm=T)
+if (require(raster)) {
+  r <- raster(extent(c(0,3,0,3)), nrows = 3, ncols = 3)
+  wall.idx <- 4:5
+  values(r)[-wall.idx] <- 1
+  obs <- coordinates(r)[-wall.idx, ]
 
- res <- distmatGen(obs,costsurf,ret="obs")
- plot(dd.distmat[,51],res[,51],ylim=c(0,600),xlim=c(0,600))
+  ddm <- distmatGen(obs, r, ret = "obs", directions = 8)
+
+  par(mfrow = c(2, 1))
+  plot(r)
+  text(obs[, 1], obs[, 2],
+       col = c('red', rep('black', 6)))
+
+  plot(dist(obs)[1:6], ddm[-1, 1],
+       type = 'n',
+       main = 'Distances to point 1',
+       xlab = 'Euclidean distance',
+       ylab = 'Cost-based distance')
+  text(dist(obs)[1:6], ddm[-1, 1],
+       labels = 2:7)
+  abline(0, 1)
+}
 }
 
