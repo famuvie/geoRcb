@@ -1,6 +1,6 @@
 Package: geoRcb
 Title: An Extension of Package geoR that Works with Cost-Based Distances
-Version: 1.7-5
+Version: 1.7-6
 Date: 2015-08-07
 Encoding: UTF-8
 Authors@R: c(person("Facundo", "Muñoz",
@@ -18,11 +18,12 @@ Depends:
 Imports:
     gdistance
 Suggests:
-    sp
-    raster
+    sp,
+    raster,
+    testthat,
+    knitr
 License: GPL (>= 3) | file LICENSE
 URL: https://github.com/famuvie/geoRcb
 BugReports: https://github.com/famuvie/geoRcb/issues
 LazyData: true
-Encoding: UTF-8
-Suggests: testthat
+VignetteBuilder: knitr

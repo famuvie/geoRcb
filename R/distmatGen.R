@@ -80,6 +80,10 @@ distmatGen <- function(pts,
   if (ret == "both" || ret == "obs") {
     oret <- diag(0, nrow = nrow(fromcoords))
     oret.c <- costDistance(tr, fromcoords)
+    if (any(idx <- oret.c == 0)) {
+      ## Avoid artifactual distances of zero due to raster resolution
+      oret.c[idx] <- dist(fromcoords)[idx]
+    }
     oret[lower.tri(oret)] <- oret.c
     oret <- oret+t(oret)
 
@@ -99,6 +103,11 @@ distmatGen <- function(pts,
     # tocoords <- xyFromCell(tr,which(values(r)==res(r)))
     tocoords <- coordinates(r)
     lret <- t(costDistance(tr, fromcoords, tocoords))
+
+    ## Avoid distances exactly equal to zero
+    ## these are artifacts: all observations fall in exactly one raster cell
+    ## distance to the center is about res/2 on average
+    lret[lret == 0] <- sqrt(prod(res(r)))/2
 
     # Warn about isolated points
     if (!silent && length(idx <- idx_isol(lret)) > 0) {
