@@ -1,0 +1,88 @@
+---
+title: "Export prediction as a raster GIS file"
+author: "Facundo Muñoz"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Export prediction as a raster GIS file}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+
+```{r setup, message = FALSE}
+library(geoRcb)  # cost-based kriging
+require(sp)      # spatial classes
+require(raster)  # rasterize
+require(rgdal)   # input/output, projections
+```
+
+# Produce a kriging prediction
+
+For the sake of the example, we are going to use the `noise` data, included with `geoRcb`.
+First thing is to make it a `geodata` object, specifying the target variable.
+
+```{r observations}
+data(noise)
+obs.gd <- as.geodata(obs, data.col="Leq")
+```
+
+
+Fit a cost-based variogram model and perform cost-based Kriging prediction.
+
+```{r fit-model, message = FALSE}
+vgmdl.dmat <- likfit(geodata = obs.gd,
+                     ini = c(8,300),
+                     cov.model = "matern",
+                     dists.mat=dd.distmat)
+
+KC <- krige.control(obj.model=vgmdl.dmat)
+kp <- krige.conv(obs.gd,
+                 locations=coordinates(loc),
+                 krige=KC,
+                 dd.dists.mat=dd.distmat,
+                 dl.dists.mat=dl.distmat)
+```
+
+
+# Rasterize the prediction
+
+```{r}
+pred <- data.frame(coordinates(loc),
+                   mean = kp$predict,
+                   var = kp$krige.var)
+coordinates(pred) <- 1:2    # Promote to SpatialPointsDataFrame
+```
+
+If the prediction locations (loc) formed a regular grid
+we could inmediately promote to SpatialGridDataFrame
+Then skip to Export
+
+```{r make-gridded, eval = FALSE}
+gridded(pred) <- TRUE   # not this case
+```
+
+
+
+Otherwise, then we need to create an "empty" grid at a specified
+resolution, and then overlay the predicted values
+It is possible to do it without resorting to package raster
+but if find it much easier using it like this.
+
+```{r}
+resolution <- 10
+prediction_grid <- raster(extent(loc), resolution = resolution)
+prediction_grid <- rasterize(pred, prediction_grid, field = 'mean')
+crs(prediction_grid) <- CRS(proj4string(loc))
+prediction_grid <- as(prediction_grid, "SpatialGridDataFrame")
+# plot(prediction_grid)
+```
+
+
+# Export
+
+```{r}
+fn <- tempfile()
+writeGDAL(prediction_grid, fn)
+```
+
